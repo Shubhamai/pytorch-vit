@@ -2,9 +2,9 @@
 import torch
 from vit_pytorch import ViT
 
-from dataloader.mnist import load_mnist
-from trainer import test
-from utils import load_model, plot_results
+import dataloader
+import trainer
+import utils
 
 
 def main():
@@ -13,7 +13,7 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Load the data
-    _, test_loader = load_mnist()
+    _, test_loader = dataloader.mnist.load_mnist()
 
     # Create the model
     model = ViT(
@@ -33,13 +33,13 @@ def main():
     criterion = torch.nn.CrossEntropyLoss()
 
     # Load the model
-    load_model(model, model_path="./experiments/models/model.pt")
+    utils.load_model(model, model_path="./experiments/models/model.pt")
 
     # Test the model
-    test_data = test(model, test_loader, device=device, criterion=criterion)
+    test_data = trainer.test(model, test_loader, device=device, criterion=criterion)
 
     # Plot the results
-    plot_results(test_data,save_target_dir="./experiments/results", name="test_results.jpg")
+    utils.plot_results(test_data,save_target_dir="./experiments/results", name="test_results.jpg")
 
 
 if __name__ == "__main__":

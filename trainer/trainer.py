@@ -1,6 +1,7 @@
 # Importing Libraries
-import torch.nn as nn
 import torch
+import torch.nn as nn
+
 
 def step(
     model: nn.Module,
@@ -78,27 +79,30 @@ def train(
     data = {"step": {"loss": [], "accuracy": []}, "epoch": {"loss": [], "accuracy": []}}
     for n_epoch in range(epoch):
 
+        loss_step = []
+        accuracy_step = []
         for index, (img, label) in enumerate(train_loader):
 
             img, label = img.to(device), label.to(device)
 
             loss, accuracy = step(model, img, label, optimizer, criterion)
 
-            data["step"]["loss"].append(loss.item())
-            data["step"]["accuracy"].append(accuracy.item())
+            loss_step.append(loss.item())
+            accuracy_step.append(accuracy.item())
 
             if index % 100 == 0:
                 print(
-                    f"Epoch: {n_epoch}/{epoch} | Batch: {index}/{len(train_loader)} | Loss: {loss.item():.4f} | Accuracy: {accuracy.item():.4f}"
+                    f"Epoch: {n_epoch+1}/{epoch} | Batch: {index}/{len(train_loader)} | Loss: {loss.item():.4f} | Accuracy: {accuracy.item():.4f}"
                 )
 
-        data["epoch"]["loss"].append(sum(data["step"]["loss"]) / len(train_loader))
-        data["epoch"]["accuracy"].append(
-            sum(data["step"]["accuracy"]) / len(train_loader)
-        )
+        data["step"]["loss"].extend(loss_step)
+        data["step"]["accuracy"].extend(accuracy_step)
+
+        data["epoch"]["loss"].append(sum(loss_step) / len(train_loader))
+        data["epoch"]["accuracy"].append(sum(accuracy_step) / len(train_loader))
 
         print(
-            f"Train Epoch: {n_epoch}/{epoch} | Loss: {data['epoch']['loss'][n_epoch]:.4f} | Accuracy: {data['epoch']['accuracy'][n_epoch]:.4f}"
+            f"Train Epoch: {n_epoch+1}/{epoch} | Loss: {data['epoch']['loss'][n_epoch]:.4f} | Accuracy: {data['epoch']['accuracy'][n_epoch]:.4f}"
         )
 
     return data

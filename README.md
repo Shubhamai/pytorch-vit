@@ -1,21 +1,21 @@
 # PyTorch ViT
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/Shubhamai/pytorch-mobilenet/blob/main/LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/Shubhamai/pytorch-vit/blob/main/LICENSE)
 
 
 This repo contains my implementation of ViT in PyTorch from scratch ( for educational purposes ).
 
 - [PyTorch ViT](#pytorch-vit)
-  - [Usage :](#usage-)
-  - [Notes :](#notes-)
+  - [Usage](#usage)
+  - [Notes](#notes)
   - [Acknowledgments](#acknowledgments)
   - [Citation](#citation)
 
 
-## Usage : 
+## Usage
 
 > In progress...
 
-## Notes :
+## Notes
 
 > In progress...
 
@@ -26,6 +26,7 @@ I found these resources helpful in creating this project:
 - [https://www.learnpytorch.io/](https://www.learnpytorch.io/) - a great resource for learning PyTorch, especially for beginners.
 - [ViT-PyTorch](https://github.com/lucidrains/vit-pytorch) - a comparison benchmark to check if the custom ViT was working correctly.
 - [Google Python Style Guide](https://google.github.io/styleguide/pyguide.html) - have been following this guide for a while now to write consistent and better python code.
+- [Pytorch-Project-Template](https://github.com/moemen95/Pytorch-Project-Template) - for the project template inspiration.
 
 ## Citation
 

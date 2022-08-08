@@ -1,7 +1,6 @@
 # PyTorch ViT
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/Shubhamai/pytorch-vit/blob/main/LICENSE)
 
-
 This repo contains my implementation of ViT in PyTorch from scratch ( for educational purposes ).
 
 - [PyTorch ViT](#pytorch-vit)

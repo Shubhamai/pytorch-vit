@@ -18,7 +18,7 @@ def main():
     utils.reproducibility()
 
     # Load the data
-    train_loader, _ = dataloader.mnist.load_mnist()
+    train_loader, _ = dataloader.mnist.load_mnist(batch_size=2)
 
     # Create the model
     model = ViT(

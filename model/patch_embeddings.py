@@ -1,5 +1,6 @@
 """ Contains functions and classes for generating input for Transformer Encoder"""
 
+# Importing Libraries
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
@@ -81,16 +82,17 @@ class PatchEmbeddings(nn.Module):
             ),
             nn.Flatten(
                 2, 3
-            ),  # Flatten the output of the convolutional layer into a 1d vector
+            ),  # Flatten the output of the convolutional layer into a 1d vector, as mentioned in figure 1 of the ViT paper - Linear Projection
+            # of flattened patches, and para 1 of section 3.1 of the ViT paper.
         )
 
-        # Adding an extra learnable class embedding as mentioned in the paper
+        # Adding an extra learnable class embedding as mentioned in section 3.1, para 2 of the attention paper
         self.cls_token = nn.Parameter(
             torch.rand(1, 1, embedding_dim),  # batch size, 1, embedding_dim
             requires_grad=True,  # the class embedding parameters will update through backpropagation
         )
 
-        # Adding positional embeddings in class embedding and each patch
+        # Adding positional embeddings in class embedding and each patch as mentioned in section 3.1, para 3 of the attention paper
         self.positional_embeddings = nn.Parameter(
             torch.rand(
                 1, ((image_size // patch_size) ** 2) + 1, embedding_dim
@@ -119,12 +121,12 @@ class PatchEmbeddings(nn.Module):
 
         cls_token = self.cls_token.expand(
             batch_size, -1, -1
-        )  # adding more batch size to the class embedding
+        )  # adding batch dim to the class embedding
         x = torch.cat((cls_token, x), dim=1)
 
         positional_embeddings = self.positional_embeddings.expand(
             batch_size, -1, -1
-        )  # adding more batch size to the positional embedding
+        )  # adding batch dim to the positional embedding
         x = x + positional_embeddings
 
         return x
@@ -132,11 +134,11 @@ class PatchEmbeddings(nn.Module):
 
 if __name__ == "__main__":
 
-    PATCH_SIZE = 14
-    IMAGE_SIZE = 28
+    PATCH_SIZE = 16
+    IMAGE_SIZE = 224
 
     # Reading the image
-    img = cv2.imread("utils/test_imgs/saturnv.jpg")
+    img = cv2.imread("utils/assets/saturnv.jpg")
     img = cv2.resize(img, (IMAGE_SIZE, IMAGE_SIZE))
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     # plt.imshow(img)
@@ -146,9 +148,10 @@ if __name__ == "__main__":
     img = torch.tensor(img.astype(np.float32) / 255.0).transpose(-1, 0)
     patches = generate_patches(img, PATCH_SIZE)
     out_img = torchvision.utils.make_grid(
-        patches, nrow=img.size(2) // PATCH_SIZE, padding=10
-    )
-    # plt.imshow(out_img.transpose(0, -1))
+        patches, nrow=img.size(2) // PATCH_SIZE, padding=5
+    ).transpose(0, -1)
+    plt.imshow(out_img)
+    plt.imsave("utils/assets/saturnv-patches.png", out_img.numpy())
     # plt.show()
 
     # Generating the input for Transformer Encoder

@@ -1,12 +1,10 @@
 # Importing Libraries
-import os
-
 import torch
-from vit_pytorch import ViT
 
-import dataloader
-import trainer
-import utils
+from dataloader import load_mnist
+from model.vit import ViT
+from trainer import train
+from utils import plot_results, reproducibility, save_model
 
 
 def main():
@@ -15,23 +13,20 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Reproducibility
-    utils.reproducibility()
+    reproducibility()
 
     # Load the data
-    train_loader, _ = dataloader.mnist.load_mnist(batch_size=2)
+    train_loader, _ = load_mnist(batch_size=16)
 
     # Create the model
     model = ViT(
-        image_size=28,
         patch_size=7,
-        channels=1,
-        num_classes=10,
-        dim=64,
-        depth=2,
-        heads=8,
-        mlp_dim=128,
-        dropout=0.1,
-        emb_dropout=0.1,
+        image_size=28,
+        in_channels=1,
+        embed_dim=64,
+        n_encoder=2,
+        n_heads=8,
+        n_classes=10,
     ).to(device)
 
     # Create the optimizer
@@ -41,17 +36,18 @@ def main():
     criterion = torch.nn.CrossEntropyLoss()
 
     # Train the model
-    train_data = trainer.train(
+    train_data = train(
         model, train_loader, optimizer, criterion, device=device, epoch=2
     )
 
     # Save the model
-    utils.save_model(model, target_dir="./experiments/models")
+    save_model(model, target_dir="./experiments/models")
 
     # Plot the results
-    utils.plot_results(train_data, save_target_dir="./experiments/results", name="train_results.jpg")
+    plot_results(
+        train_data, save_target_dir="./experiments/results", name="train_results.jpg"
+    )
 
 
 if __name__ == "__main__":
-
     main()

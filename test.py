@@ -1,10 +1,10 @@
 # Importing Libraries
 import torch
-from vit_pytorch import ViT
 
-import dataloader
-import trainer
-import utils
+from dataloader import load_mnist
+from model.vit import ViT
+from trainer import test
+from utils import load_model, plot_results
 
 
 def main():
@@ -13,33 +13,32 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Load the data
-    _, test_loader = dataloader.mnist.load_mnist()
+    _, test_loader = load_mnist()
 
     # Create the model
     model = ViT(
-        image_size=28,
         patch_size=7,
-        channels=1,
-        num_classes=10,
-        dim=64,
-        depth=2,
-        heads=8,
-        mlp_dim=128,
-        dropout=0.1,
-        emb_dropout=0.1,
+        image_size=28,
+        in_channels=1,
+        embed_dim=64,
+        n_encoder=2,
+        n_heads=8,
+        n_classes=10,
     ).to(device)
 
     # Create the loss function
     criterion = torch.nn.CrossEntropyLoss()
 
     # Load the model
-    utils.load_model(model, model_path="./experiments/models/model.pt")
+    load_model(model, model_path="./experiments/models/model.pt")
 
     # Test the model
-    test_data = trainer.test(model, test_loader, device=device, criterion=criterion)
+    test_data = test(model, test_loader, device=device, criterion=criterion)
 
     # Plot the results
-    utils.plot_results(test_data,save_target_dir="./experiments/results", name="test_results.jpg")
+    plot_results(
+        test_data, save_target_dir="./experiments/results", name="test_results.jpg"
+    )
 
 
 if __name__ == "__main__":

@@ -9,36 +9,35 @@ import torch.nn as nn
 from scipy.signal import savgol_filter
 
 
-def save_model(model: nn.Module, target_dir: str, name: str = "model.pt") -> None:
+def save_model(model: nn.Module, target_path: str) -> None:
     """Save the model to a file.
 
     Args:
         model (nn.Module): The model to save.
-        target_dir (str): The directory to save the model to.
-        name (str): The name of the model.
+        target_dir (str): The path to save the model to.
 
     Returns:
         None
     """
 
-    if not os.path.exists(target_dir):
-        os.makedirs(target_dir, exist_ok=True)
+    if not os.path.exists(os.path.dirname(target_path)):
+        os.makedirs(os.path.dirname(target_path), exist_ok=True)
 
-    torch.save(model.state_dict(), os.path.join(target_dir, name))
+    torch.save(model, target_path)
 
 
-def load_model(model: nn.Module, model_path: str) -> nn.Module:
+def load_model(model_path: str, device:str="cuda") -> nn.Module:
     """Load the model from a file.
 
     Args:
-        model (nn.Module): The model to load.
         model_path (str): The path to load the model from.
+        device (str): The device to use.
 
     Returns:
         nn.Module: The loaded model.
     """
 
-    return model.load_state_dict(torch.load(model_path))
+    return torch.load(model_path, map_location=device)
 
 
 def plot_results(
@@ -66,35 +65,35 @@ def plot_results(
         data["step"]["loss"] = savgol_filter(data["step"]["loss"], 21, 2)
         data["step"]["accuracy"] = savgol_filter(data["step"]["accuracy"], 21, 2)
 
-    plt.figure(figsize=(60, 30))
+    plt.figure(figsize=(80, 20))
 
     # Step Loss Chart
-    plt.subplot(2, 2, 1)
+    plt.subplot(1, 2, 1)
     plt.plot(data["step"]["loss"])
     plt.title("Step Loss")
     plt.xlabel("Step")
     plt.ylabel("Loss")
 
     # Step Accuracy Chart
-    plt.subplot(2, 2, 2)
+    plt.subplot(1, 2, 2)
     plt.plot(data["step"]["accuracy"])
     plt.title("Step Accuracy")
     plt.xlabel("Step")
     plt.ylabel("Accuracy")
 
-    # Step Accuracy Chart
-    plt.subplot(2, 2, 3)
-    plt.plot(data["epoch"]["loss"])
-    plt.title("Epoch Loss")
-    plt.xlabel("Epoch")
-    plt.ylabel("Loss")
+    # # Epoch Accuracy Chart
+    # plt.subplot(2, 2, 3)
+    # plt.plot(data["epoch"]["loss"])
+    # plt.title("Epoch Loss")
+    # plt.xlabel("Epoch")
+    # plt.ylabel("Loss")
 
-    # Step Accuracy Chart
-    plt.subplot(2, 2, 4)
-    plt.plot(data["epoch"]["accuracy"])
-    plt.title("Epoch Accuracy")
-    plt.xlabel("Epoch")
-    plt.ylabel("Accuracy")
+    # # Epoch Accuracy Chart
+    # plt.subplot(2, 2, 4)
+    # plt.plot(data["epoch"]["accuracy"])
+    # plt.title("Epoch Accuracy")
+    # plt.xlabel("Epoch")
+    # plt.ylabel("Accuracy")
 
     plt.savefig(os.path.join(save_target_dir, name))
 

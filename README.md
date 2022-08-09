@@ -5,18 +5,22 @@ This repo contains my implementation of the ViT paper - *[An image is worth 16x1
 
 
 - [PyTorch ViT](#pytorch-vit)
-- [What is ViT](#what-is-vit)
+- [What is ViT ?](#what-is-vit-)
   - [1. Input Embeddings](#1-input-embeddings)
   - [2. Transformer Encoder](#2-transformer-encoder)
   - [3. MLP Head](#3-mlp-head)
+- [Setup](#setup)
 - [Usage](#usage)
+  - [Training](#training)
+  - [Testing](#testing)
 - [Notes](#notes)
     - [*FAQ 4 myself* :)](#faq-4-myself-)
+- [Hardware Requirements](#hardware-requirements)
 - [Acknowledgments](#acknowledgments)
 - [Citation](#citation)
 
 
-## What is ViT
+## What is ViT ?
 
 <p align="center">
 <img src="./utils/assets/ViTarchitecture.png" width="450"/><br>
@@ -30,10 +34,7 @@ Previously, transformers were mostly used in the NLP domain such as text generat
 
 
 ### 1. Input Embeddings
-One of the main challenges in using transformers for computer vision is the sheer amount of computational cost needed to directly use image pixels as input embeddings. Instead, we first split the images into multiple patches, and run them through a convolution layer to resize their size to generate the embedding.
-
-
-The convolution layer also learns through backpropagation to generate meaningful features from the image to be used as embeddings.
+One of the main challenges in using transformers for computer vision is the sheer amount of computational cost needed to directly use image pixels as input embeddings. Instead, we first split the images into multiple patches, and run them through a convolution layer to resize their size to generate the embedding. 
 
 <p align="center">
 
@@ -43,16 +44,23 @@ The convolution layer also learns through backpropagation to generate meaningful
 
 </center>
 
+The convolution layer also learns through backpropagation to generate meaningful features from the image to be used as embeddings.
+
+After generating the patch embeddings, we add class token and position encoding to the embeddings.
+<p align="center">
+<img src="./utils/assets/position_embeddings.png" width="550"/><br>
+<em>Figure 2: Position embeddings of models trained with different hyperparameters.</em>
+</p>
 
 ### 2. Transformer Encoder
 
 One we have the embedded patches ( see figure 1. ), we then send it through the Transformer Encoder. 
 <p align="center">
 <img src="./utils/assets/transformer_encoder.png" width="250"/><br>
-<em>Figure 2. Transformer Encoder</em>
+<em>Figure 3. Transformer Encoder</em>
 </p>
 
-As you can see the transformer encoder does a lot of things, but they are very easy to understand and implement given enough time. I have shared some cool resources in the [Acknowledgments](#acknowledgments) section to help you understand transformer encoder.
+As you can probably see from the image, the transformer encoder does a lot of things, but they are very easy to understand and implement given enough time. I have shared some cool resources in the [Acknowledgments](#acknowledgments) section to help you understand transformer encoder.
 
 These encoder block outputs the same dimension as the input one, so we can easily stack them together capturing more information and better generalization. 
 
@@ -60,14 +68,49 @@ These encoder block outputs the same dimension as the input one, so we can easil
 
 The MLP head is a fully connected layer that takes the output of the Transformer Encoder and generates the final output. It is simply a combination of a layer normalization and a fully connected layer.
 
+## Setup
+
+1. Clone the repo - `git clone https://github.com/Shubhamai/pytorch-vit/`
+2. Create a new conda environment using `conda env create --prefix env python=3.7.13 --file=environment.yml`
+3. Activate the conda environment using `conda activate ./env`
+
 ## Usage
 
-> In progress...
+### Training
+
+You can start the training by running `python train.py`. You can view the default parameters by running `python train.py -h`.
+
+Here what mostly the script does -  
+- Downloads the MNIST dataset automatically and save in the [data](/data) directory.
+- Training the ViT model on the MNIST train set with parameters passed in the CLI.
+- The trainings metrics are saved in the [experiments/results](/experiments/results) directory.
+- The model is automatically saved in the [experiments/models/](/experiments/models/) directory.
+
+<p align="center">
+<img src="./experiments/results/train_results.jpg" width="500" height="200"/><br>
+<em>Training Results from 2 epochs on MNIST train set</em>
+</p>
+
+
+### Testing
+
+To test the model, simply run `python test.py` . Yu can view the default parameters by running `python train.py -h`..
+
+Here what mostly the script does -  
+- The model will be automatically loaded from [experiments/models/](/experiments/models/) directory.
+- Test the model on the MNIST test set with the parameters passed in the CLI.
+- The test metrics are saved in the [experiments/results](/experiments/results) directory.
+
+<p align="center">
+<img src="./experiments/results/test_results.jpg" width="550"/><br>
+<em>Testing Results on MNIST test set</em>
+</p>
+
 
 ## Notes
 
 1. The `hidden dim` in [**MLP block**](model/encoder.py)  is calculated by simply multiplying the `input dim` by a **factor of 4**, it is due to a similar pattern observed in Table 1. of the ViT paper. 
-2. To `hidden dim` in [**Attention Head**](/model/multi_head_attention.py) for the feed forward layers for query, key and value is calcuating by `embed_dim // n_heads` . I am still unsure of why we do it this way.  
+2. To `hidden dim` in [**Attention Head**](/model/multi_head_attention.py) for the feed forward layers for query, key and value is calculated by `embed_dim // n_heads` . I am still unsure of why we do it this way.  
 
 #### *FAQ 4 myself* :)  
 <details><summary>What's the point of value, key and query in Multi-Head Attention </summary>
@@ -86,6 +129,16 @@ In progress...
 In progress...
 </details>
 
+## Hardware Requirements
+
+The hardware which I tried the model on default settings is  - 
+- Ryzen 5 4600H
+- NVIDIA GeForce GTX 1660Ti - 6 GB VRAM
+- 12 GB ram
+It took around 2 min per epoch on my machine. 
+
+So, yeah, it will run just fine :) 
+
 ## Acknowledgments
 
 I found these resources helpful in creating this project:
@@ -97,6 +150,7 @@ I found these resources helpful in creating this project:
 - [Pytorch-Project-Template](https://github.com/moemen95/Pytorch-Project-Template) - for the project template inspiration.
 - [Illustrated Transformer](https://jalammar.github.io/illustrated-transformer/) - Understanding transformers in a more visual way by Jay Alammar.
 - [e2eml transformers](https://e2eml.school/transformers.html) - A very highly detailed blog on transformers.
+- [pytorch-original-transformer](https://github.com/gordicaleksa/pytorch-original-transformer) - Using this as my readme template. 
 
 ## Citation
 

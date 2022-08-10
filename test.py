@@ -1,5 +1,6 @@
 # Importing Libraries
 import argparse
+import yaml
 
 import torch
 
@@ -40,6 +41,9 @@ if __name__ == "__main__":
 
     my_parser = argparse.ArgumentParser(description="Testing script for ViT")
 
+    # Main Configuration
+    my_parser.add_argument("--config_path", type=str, help="Path to the config file")
+
     # Data parameters
     my_parser.add_argument("--dataset_name", choices=["foodvision", "mnist"], default="mnist", help="Name of the dataset")
     my_parser.add_argument("--batch_size", type=int, default=16, help="Batch size")
@@ -57,5 +61,11 @@ if __name__ == "__main__":
     config = {}
     for arg in vars(args):
         config[arg] = getattr(args, arg)
+
+    # If config path is mentioned, load the configuration from the file
+    if config['config_path']:
+        print("Loading configuration from {}".format(config['config_path']))
+        with open(config['config_path'], 'r') as stream:
+            config = yaml.load(stream, Loader=yaml.FullLoader)
 
     main(config)

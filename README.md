@@ -79,31 +79,31 @@ The MLP head is a fully connected layer that takes the output of the Transformer
 
 ### Training
 
-You can start the training by running `python train.py`. You can view the default parameters by running `python train.py -h`.
+You can start the training by running `python train.py`. You can view the default parameters by running `python train.py -h`. There are configs file also available in the `configs` folder, you can use them to train the model by running ex. - `python train.py --config_path configs/mnist.yaml`. The arguments passed to in cli will be overridden by the config file.
 
 Here what mostly the script does -  
 - Downloads the MNIST dataset automatically and save in the [data](/data) directory.
 - Training the ViT model on the MNIST train set with parameters passed in the CLI.
-- The trainings metrics are saved in the [experiments/results](/experiments/results) directory.
-- The model is automatically saved in the [experiments/models/](/experiments/models/) directory.
+- The trainings metrics are saved in the [experiments/results](/experiments/results) directory with the corresponding data name.
+- The model is automatically saved in the [experiments/models/](/experiments/models/) directory with the corresponding data name.
 
 <p align="center">
-<img src="./experiments/results/train_results.jpg" width="600" height="380"/><br>
+<img src="./experiments/results/mnist/train_results.jpg" width="600" height="380"/><br>
 <em>Training Results from 2 epochs on MNIST train set</em>
 </p>
 
 
 ### Testing
 
-To test the model, simply run `python test.py` . Yu can view the default parameters by running `python train.py -h`..
+To test the model, simply run `python test.py` . You can view the default parameters by running `python train.py -h`. There are configs file also available in the `configs` folder, you can use them to train the model by running ex. - `python test.py --config_path configs/mnist.yaml`. The arguments passed to in cli will be overridden by the config file.
 
 Here what mostly the script does -  
-- The model will be automatically loaded from [experiments/models/](/experiments/models/) directory.
+- The model will be automatically loaded from [experiments/models/](/experiments/models/) directory with the corresponding data name.
 - Test the model on the MNIST test set with the parameters passed in the CLI.
-- The test metrics are saved in the [experiments/results](/experiments/results) directory.
+- The test metrics are saved in the [experiments/results](/experiments/results) directory with the corresponding data name.
 
 <p align="center">
-<img src="./experiments/results/test_results.jpg" width="600" height="380"/><br>
+<img src="./experiments/results/mnist/test_results.jpg" width="600" height="380"/><br>
 <em>Testing Results on MNIST test set</em>
 </p>
 

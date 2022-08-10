@@ -1,0 +1,22 @@
+# Data configs
+batch_size: 16
+dataset_name: foodvision
+image_size: 224
+
+# Model configs
+device: cuda
+embed_dim: 64
+in_channels: 3
+n_classes: 3
+n_encoder: 2
+n_heads: 8
+patch_size: 16
+
+# Training configs
+epochs: 30
+lr: 0.001
+
+# Other configs
+model_path: ./experiments/models/foodvision_model.pt
+results_dir: ./experiments/results/foodvision
+seed: 42

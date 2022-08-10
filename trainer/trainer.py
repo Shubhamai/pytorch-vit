@@ -10,7 +10,7 @@ def step(
     optimizer: torch.optim,
     criterion: torch.nn.Module,
     is_train: bool = True,
-) -> dict:
+) -> tuple:
     """Perform a single step of training or testing.
 
     Generate the predictions and calculate the loss and accuracy. If training, also perform backpropagation.
@@ -23,19 +23,19 @@ def step(
         criterion: The loss function to use.
         train (bool): if it's in training mode, perform backpropagation, otherwise, just compute the loss and accuracy.
     Returns:
-        dict: The loss and accuracy of individual step and epoch."""
+        tuple: The loss and accuracy of individual step and epoch."""
 
     preds = model(img).squeeze()
 
-    accuracy = torch.mean((preds.argmax(dim=1) == label).float())
     loss = criterion(preds, label)
+    accuracy = (preds.argmax(dim=1) == label).sum().item() / len(preds.argmax(dim=1))
 
     if is_train:
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
 
-    return loss, accuracy
+    return loss.item(), accuracy
 
 
 def train(
@@ -82,17 +82,16 @@ def train(
         loss_step = []
         accuracy_step = []
         for index, (img, label) in enumerate(train_loader):
-
             img, label = img.to(device), label.to(device)
 
             loss, accuracy = step(model, img, label, optimizer, criterion)
 
-            loss_step.append(loss.item())
-            accuracy_step.append(accuracy.item())
+            loss_step.append(loss)
+            accuracy_step.append(accuracy)
 
             if index % 100 == 0:
                 print(
-                    f"Epoch: {n_epoch+1}/{epoch} | Batch: {index}/{len(train_loader)} | Loss: {loss.item():.4f} | Accuracy: {accuracy.item():.4f}"
+                    f"Epoch: {n_epoch+1}/{epoch} | Batch: {index}/{len(train_loader)} | Loss: {loss:.4f} | Accuracy: {accuracy:.4f}"
                 )
 
         data["step"]["loss"].extend(loss_step)
@@ -147,16 +146,15 @@ def test(
     with torch.no_grad():
 
         for index, (img, label) in enumerate(test_loader):
-
             img, label = img.to(device), label.to(device)
 
             loss, accuracy = step(model, img, label, None, criterion, is_train=False)
-            data["step"]["loss"].append(loss.item())
-            data["step"]["accuracy"].append(accuracy.item())
+            data["step"]["loss"].append(loss)
+            data["step"]["accuracy"].append(accuracy)
 
             if index % 100 == 0:
                 print(
-                    f"Batch: {index}/{len(test_loader)} | Loss: {loss.item():.4f} | Accuracy: {accuracy.item():.4f}"
+                    f"Batch: {index}/{len(test_loader)} | Loss: {loss:.4f} | Accuracy: {accuracy:.4f}"
                 )
     data["epoch"]["loss"].append(sum(data["step"]["loss"]) / len(test_loader))
     data["epoch"]["accuracy"].append(sum(data["step"]["accuracy"]) / len(test_loader))

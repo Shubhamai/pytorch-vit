@@ -20,9 +20,9 @@ class ViT(nn.Module):
         embed_dim: int,
         n_encoder: int,
         n_heads: int,
-        mlp_dropout_p: float=0.1,
-        attn_dropout_p: float=0.,
-    ):  
+        mlp_dropout_p: float = 0.1,
+        attn_dropout_p: float = 0.0,
+    ):
         """Implementation of the Vision Transformer.
 
         Args:
@@ -36,7 +36,7 @@ class ViT(nn.Module):
             mlp_dropout_p (float, optional): Dropout probability for the MLP block. Defaults to 0.1.
             attn_dropout_p (float, optional): Dropout probability for the attention block. Defaults to 0.
         """
-        
+
         super().__init__()
 
         self.patch_embeddings = PatchEmbeddings(
@@ -46,7 +46,10 @@ class ViT(nn.Module):
             embedding_dim=embed_dim,
         )
         self.encoders = nn.ModuleList(
-            [Encoder(embed_dim, n_heads, mlp_dropout_p, attn_dropout_p) for _ in range(n_encoder)]
+            [
+                Encoder(embed_dim, n_heads, mlp_dropout_p, attn_dropout_p)
+                for _ in range(n_encoder)
+            ]
         )
 
         self.layernorm1 = nn.LayerNorm(embed_dim)
@@ -58,7 +61,7 @@ class ViT(nn.Module):
         Steps -
         1. Get the embedding for the input patch.
         2. Pass the embedding through the encoder blocks.
-        3. Pass the embedding through the MLP head, using 0th index of the last encoder output. 
+        3. Pass the embedding through the MLP head, using 0th index of the last encoder output.
         4. Output the logits.
 
         Args:
@@ -73,7 +76,15 @@ class ViT(nn.Module):
             x = encoder(x)
 
         # Using the 0th index of the encoder output is mentioned in the equation 4 of the ViT paper, section 3.1.
-        # Note; But why 0th index ?
+        """
+        The reason we are using the 0th index, 
+        is that is this 0th index is the class token embedding we added to our input embeddings
+        
+        Since in bert language model, the encoder output can also be used in the decoder layers,
+        we added an another class token embedding so that we can use this output for classification
+
+        I hope this helps :)  
+        """
         x = x[:, 0]
 
         x = self.layernorm1(x)

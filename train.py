@@ -3,7 +3,7 @@ import argparse
 
 import torch
 
-from dataloader import load_mnist
+from dataloader import load_mnist, load_foodvision
 from model.vit import ViT
 from trainer import train
 from utils import plot_results, reproducibility, save_model
@@ -18,7 +18,12 @@ def main(config):
     reproducibility(seed=config["seed"])
 
     # Load the data
-    train_loader, _ = load_mnist(batch_size=config["batch_size"])
+    if config["dataset_name"] == "mnist":
+        train_loader, _ = load_mnist(batch_size=config["batch_size"], image_size=config["image_size"])
+    elif config["dataset_name"] == "foodvision":
+        train_loader, _ = load_foodvision(batch_size=config["batch_size"], image_size=config["image_size"])
+    else:
+        assert False, "Unknown dataset name"
 
     # Create the model
     model = ViT(
@@ -54,6 +59,7 @@ if __name__ == "__main__":
     my_parser = argparse.ArgumentParser(description="Training script for ViT")
 
     # Data parameters
+    my_parser.add_argument("--dataset_name", choices=["foodvision", "mnist"], default="mnist", help="Name of the dataset")
     my_parser.add_argument("--batch_size", type=int, default=16, help="Batch size")
 
     # Model training  parameters

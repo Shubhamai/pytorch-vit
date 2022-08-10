@@ -1,8 +1,9 @@
 ## PyTorch ViT
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/Shubhamai/pytorch-vit/blob/main/LICENSE)
 
-This repo contains my implementation of the ViT paper - *[An image is worth 16x16 words : Transformers for image recognition at scale](https://arxiv.org/abs/2010.11929)* in PyTorch from scratch ( for educational purposes ).
+This repo contains my implementation of the ViT paper - *[An image is worth 16x16 words : Transformers for image recognition at scale](https://arxiv.org/abs/2010.11929)* in PyTorch from scratch ( for educational purposes ). Here I am using MNIST as toy dataset so that anyone with low hardware specs can train the transformer in few minutes :) . You can view the specs I used to train this transformer here - [Hardware Requirements](#hardware-requirements)
 
+Since, this project is also highly inspired by the mrdbourke's [paper replication project as part of his pytorch course](https://www.learnpytorch.io/08_pytorch_paper_replicating/), I also have added his dataset to train the model on. 
 
 - [PyTorch ViT](#pytorch-vit)
 - [What is ViT ?](#what-is-vit-)
@@ -87,7 +88,7 @@ Here what mostly the script does -
 - The model is automatically saved in the [experiments/models/](/experiments/models/) directory.
 
 <p align="center">
-<img src="./experiments/results/train_results.jpg" width="500" height="200"/><br>
+<img src="./experiments/results/train_results.jpg" width="600" height="380"/><br>
 <em>Training Results from 2 epochs on MNIST train set</em>
 </p>
 
@@ -102,7 +103,7 @@ Here what mostly the script does -
 - The test metrics are saved in the [experiments/results](/experiments/results) directory.
 
 <p align="center">
-<img src="./experiments/results/test_results.jpg" width="550"/><br>
+<img src="./experiments/results/test_results.jpg" width="600" height="380"/><br>
 <em>Testing Results on MNIST test set</em>
 </p>
 
@@ -114,20 +115,21 @@ Here what mostly the script does -
 
 #### *FAQ 4 myself* :)  
 <details><summary>What's the point of value, key and query in Multi-Head Attention </summary>
-In progress...
+[This video](https://youtu.be/H-4bmOxiKyU) from Alex-AI helped me a lot to understand this. 
 </details>
 
 <details><summary>Why position embeddings are simply added to the embeddings ?</summary>
-In progress...
+I found [this video](https://youtu.be/M2ToEXF6Olw) from AI Coffee Break with Letitia very helpful to understand this. 
 </details>
 
 <details><summary>Why is class token added in the embeddings ?</summary>
-In progress...
+I find [this answer](https://datascience.stackexchange.com/a/110637) from datascience stackexchange to be the most satisfying answer 
 </details>
 
 <details><summary>Why 0th index for the MLP Head input?</summary>
-In progress...
-</details>
+One realization is that the 0th index is actually the class token embedding we concatenated when creating the input embeddings. The question `Why is class token added in the embeddings ?` answers the rest. 
+</details> 
+
 
 ## Hardware Requirements
 
@@ -135,15 +137,15 @@ The hardware which I tried the model on default settings is  -
 - Ryzen 5 4600H
 - NVIDIA GeForce GTX 1660Ti - 6 GB VRAM
 - 12 GB ram
-It took around 2 min per epoch on my machine. 
 
-So, yeah, it will run just fine :) 
+It took around 2 min per epoch on my machine. Since, google colab has similar hardware in terms compute power from what I understand, it should run just fine on colab :)
+
 
 ## Acknowledgments
 
 I found these resources helpful in creating this project:
 
-- [https://www.learnpytorch.io/](https://www.learnpytorch.io/) - a great resource for learning PyTorch, especially for beginners, helped ne immensely in understanding ViT and implementing it from scratch. 
+- [https://www.learnpytorch.io/](https://www.learnpytorch.io/) - a great resource for learning PyTorch, especially for beginners, helped me immensely in understanding ViT and implementing it from scratch. 
 - [Transformers from scratch](https://peterbloem.nl/blog/transformers) - a really good blog by peterbloem on understanding the architecture of transformers and implementing it from scratch.
 - [ViT-PyTorch](https://github.com/lucidrains/vit-pytorch) - a comparison benchmark to check if the custom ViT was working correctly.
 - [Google Python Style Guide](https://google.github.io/styleguide/pyguide.html) - have been following this guide for a while now to write consistent and better python code.

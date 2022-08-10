@@ -62,24 +62,23 @@ def plot_results(
         os.makedirs(save_target_dir, exist_ok=True)
 
     if smooth:
-        data["step"]["loss"] = savgol_filter(data["step"]["loss"], 21, 2)
-        data["step"]["accuracy"] = savgol_filter(data["step"]["accuracy"], 21, 2)
+        data["step"]["loss"] = savgol_filter(data["step"]["loss"], 5, 3)
+        data["step"]["accuracy"] = savgol_filter(data["step"]["accuracy"], 5, 3)
 
-    plt.figure(figsize=(80, 20))
-
+    plt.figure(figsize=(10, 5))
+    fig, (ax1, ax2) = plt.subplots(1, 2)
     # Step Loss Chart
-    plt.subplot(1, 2, 1)
-    plt.plot(data["step"]["loss"])
-    plt.title("Step Loss")
-    plt.xlabel("Step")
-    plt.ylabel("Loss")
+    
+    ax1.plot(data["step"]["loss"], color="red")
+    ax1.set_title("Step Loss")
+    ax1.set_xlabel("Step")
+    ax1.set_ylabel("Loss")
 
     # Step Accuracy Chart
-    plt.subplot(1, 2, 2)
-    plt.plot(data["step"]["accuracy"])
-    plt.title("Step Accuracy")
-    plt.xlabel("Step")
-    plt.ylabel("Accuracy")
+    ax2.plot(data["step"]["accuracy"], color="blue")
+    ax2.set_title("Step Accuracy")
+    ax2.set_xlabel("Step")
+    ax2.set_ylabel("Accuracy")
 
     # # Epoch Accuracy Chart
     # plt.subplot(2, 2, 3)
@@ -94,7 +93,8 @@ def plot_results(
     # plt.title("Epoch Accuracy")
     # plt.xlabel("Epoch")
     # plt.ylabel("Accuracy")
-
+    
+    plt.tight_layout()
     plt.savefig(os.path.join(save_target_dir, name))
 
 

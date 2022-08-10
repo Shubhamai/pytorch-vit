@@ -3,7 +3,7 @@ import argparse
 
 import torch
 
-from dataloader import load_mnist
+from dataloader import load_mnist, load_foodvision
 from trainer import test
 from utils import load_model, plot_results
 
@@ -14,7 +14,12 @@ def main(config):
     device = config['device']
 
     # Load the data
-    _, test_loader = load_mnist(batch_size=config["batch_size"])
+    if config["dataset_name"] == "mnist":
+        _, test_loader = load_mnist(batch_size=config["batch_size"], image_size=config["image_size"])
+    elif config["dataset_name"] == "foodvision":
+        _, test_loader = load_foodvision(batch_size=config["batch_size"], image_size=config["image_size"])
+    else:
+        assert False, "Unknown dataset name"
 
     # Create the loss function
     criterion = torch.nn.CrossEntropyLoss()
@@ -36,9 +41,11 @@ if __name__ == "__main__":
     my_parser = argparse.ArgumentParser(description="Testing script for ViT")
 
     # Data parameters
+    my_parser.add_argument("--dataset_name", choices=["foodvision", "mnist"], default="mnist", help="Name of the dataset")
     my_parser.add_argument("--batch_size", type=int, default=16, help="Batch size")
 
     # Model testing  parameters
+    my_parser.add_argument("--image_size",type=int,default=28,help="Image size (height and width must be equal)")
     my_parser.add_argument("--device", type=str, default="cuda",choices=["cuda", "cpu"], help="Device to use")
 
     # Other parameters

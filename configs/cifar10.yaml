@@ -1,0 +1,22 @@
+# Data configs
+batch_size: 16
+dataset_name: cifar10
+image_size: 28
+
+# Model configs
+device: cuda
+embed_dim: 64
+in_channels: 3
+n_classes: 10
+n_encoder: 2
+n_heads: 8
+patch_size: 7
+
+# Training configs
+epochs: 30
+lr: 0.001
+
+# Other configs
+model_path: ./experiments/models/cifar10_model.pt
+results_dir: ./experiments/results/cifar10
+seed: 42

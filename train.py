@@ -4,11 +4,10 @@ import yaml
 
 import torch
 
-from dataloader import load_mnist, load_foodvision
-from model.vit import ViT
+from dataloader import load_mnist, load_foodvision, load_cifar10
+from vit import ViT
 from trainer import train
 from utils import plot_results, reproducibility, save_model
-
 
 
 def main(config:dict):
@@ -24,6 +23,8 @@ def main(config:dict):
         train_loader, _ = load_mnist(batch_size=config["batch_size"], image_size=config["image_size"])
     elif config["dataset_name"] == "foodvision":
         train_loader, _ = load_foodvision(batch_size=config["batch_size"], image_size=config["image_size"])
+    elif config["dataset_name"] == "cifar10":
+        train_loader, _ = load_cifar10(batch_size=config["batch_size"], image_size=config["image_size"])
     else:
         assert False, "Unknown dataset name"
 
@@ -83,8 +84,8 @@ if __name__ == "__main__":
 
     # Other parameters
     my_parser.add_argument("--seed", type=int, default=42, help="Seed")
-    my_parser.add_argument("--model_path", type=str, default="./experiments/models/model.pt", help="Model path to save")
-    my_parser.add_argument("--results_dir", type=str, default="./experiments/results", help="Results directory to save results")
+    my_parser.add_argument("--model_path", type=str, default="./experiments/models/mnist_model.pt", help="Model path to save")
+    my_parser.add_argument("--results_dir", type=str, default="./experiments/results/mnist", help="Results directory to save results")
 
     # Making a configuration
     args = my_parser.parse_args()

@@ -5,7 +5,7 @@
 import torch
 import torch.nn as nn
 
-from model.multi_head_attention import MultiHeadAttention
+from vit.multi_head_attention import MultiHeadAttention
 
 
 class MLP(nn.Module):

@@ -26,7 +26,7 @@ def save_model(model: nn.Module, target_path: str) -> None:
     torch.save(model, target_path)
 
 
-def load_model(model_path: str, device:str="cuda") -> nn.Module:
+def load_model(model_path: str, device: str = "cuda") -> nn.Module:
     """Load the model from a file.
 
     Args:
@@ -38,6 +38,23 @@ def load_model(model_path: str, device:str="cuda") -> nn.Module:
     """
 
     return torch.load(model_path, map_location=device)
+
+
+"""
+Using smooth function for loss and accuracy plot from https://stackoverflow.com/a/68510722
+All the credits for the function goes to the author of the answer - https://stackoverflow.com/users/985012/tomselleck
+"""
+
+
+def smooth_line(scalars: list, weight: float) -> list:  # Weight between 0 and 1
+    last = scalars[0]  # First value in the plot (first timestep)
+    smoothed = list()
+    for point in scalars:
+        smoothed_val = last * weight + (1 - weight) * point  # Calculate smoothed value
+        smoothed.append(smoothed_val)  # Save it
+        last = smoothed_val  # Anchor the last smoothed value
+
+    return smoothed
 
 
 def plot_results(
@@ -62,13 +79,13 @@ def plot_results(
         os.makedirs(save_target_dir, exist_ok=True)
 
     if smooth:
-        data["step"]["loss"] = savgol_filter(data["step"]["loss"], 5, 3)
-        data["step"]["accuracy"] = savgol_filter(data["step"]["accuracy"], 5, 3)
+        data["step"]["loss"] = smooth_line(data["step"]["loss"], weight=0.9)
+        data["step"]["accuracy"] = smooth_line(data["step"]["accuracy"], weight=0.9)
 
     plt.figure(figsize=(10, 5))
     fig, (ax1, ax2) = plt.subplots(1, 2)
     # Step Loss Chart
-    
+
     ax1.plot(data["step"]["loss"], color="red")
     ax1.set_title("Step Loss")
     ax1.set_xlabel("Step")
@@ -80,20 +97,6 @@ def plot_results(
     ax2.set_xlabel("Step")
     ax2.set_ylabel("Accuracy")
 
-    # # Epoch Accuracy Chart
-    # plt.subplot(2, 2, 3)
-    # plt.plot(data["epoch"]["loss"])
-    # plt.title("Epoch Loss")
-    # plt.xlabel("Epoch")
-    # plt.ylabel("Loss")
-
-    # # Epoch Accuracy Chart
-    # plt.subplot(2, 2, 4)
-    # plt.plot(data["epoch"]["accuracy"])
-    # plt.title("Epoch Accuracy")
-    # plt.xlabel("Epoch")
-    # plt.ylabel("Accuracy")
-    
     plt.tight_layout()
     plt.savefig(os.path.join(save_target_dir, name))
 

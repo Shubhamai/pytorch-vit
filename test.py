@@ -48,13 +48,13 @@ if __name__ == "__main__":
     my_parser.add_argument("--dataset_name", choices=["foodvision", "mnist"], default="mnist", help="Name of the dataset")
     my_parser.add_argument("--batch_size", type=int, default=16, help="Batch size")
 
-    # Model testing  parameters
+    # Model testing parameters
     my_parser.add_argument("--image_size",type=int,default=28,help="Image size (height and width must be equal)")
     my_parser.add_argument("--device", type=str, default="cuda",choices=["cuda", "cpu"], help="Device to use")
 
     # Other parameters
-    my_parser.add_argument("--model_path", type=str, default="./experiments/models/model.pt", help="Model directory")
-    my_parser.add_argument("--results_dir", type=str, default="./experiments/results", help="Results directory")
+    my_parser.add_argument("--model_path", type=str, default="./experiments/models/mnist_model.pt", help="Model directory")
+    my_parser.add_argument("--results_dir", type=str, default="./experiments/results/mnist", help="Results directory")
 
     # Making a configuration
     args = my_parser.parse_args()

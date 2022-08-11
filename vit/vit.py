@@ -6,8 +6,9 @@ import torch
 import torch.nn as nn
 from torchsummary import summary
 
-from model.encoder import Encoder
-from model.patch_embeddings import PatchEmbeddings
+from vit.patch_embeddings import PatchEmbeddings
+from vit.encoder import Encoder
+from vit.mlp_head import MLPHead
 
 
 class ViT(nn.Module):
@@ -52,8 +53,7 @@ class ViT(nn.Module):
             ]
         )
 
-        self.layernorm1 = nn.LayerNorm(embed_dim)
-        self.linear1 = nn.Linear(embed_dim, n_classes)
+        self.mlp_head = MLPHead(embed_dim, n_classes)
 
     def forward(self, x):
         """Computes the feed forward for the Vision Transformer.
@@ -87,8 +87,7 @@ class ViT(nn.Module):
         """
         x = x[:, 0]
 
-        x = self.layernorm1(x)
-        x = self.linear1(x)
+        x = self.mlp_head(x)
 
         return x
 

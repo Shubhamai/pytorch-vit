@@ -35,7 +35,7 @@ Previously, transformers were mostly used in the NLP domain such as text generat
 
 
 ### 1. Input Embeddings
-One of the main challenges in using transformers for computer vision is the sheer amount of computational cost needed to directly use image pixels as input embeddings. Instead, we first split the images into multiple patches, and run them through a convolution layer to resize their size to generate the embedding. 
+One of the main challenges in using transformers for computer vision is the sheer amount of computational cost needed to directly use image pixels as input embeddings. Instead, we first split the images into multiple patches, and run them through a convolution layer to decrease their size and generate the embeddings. 
 
 <p align="center">
 

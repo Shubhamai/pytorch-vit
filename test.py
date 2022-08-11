@@ -4,7 +4,7 @@ import yaml
 
 import torch
 
-from dataloader import load_mnist, load_foodvision
+from dataloader import load_mnist, load_foodvision, load_cifar10
 from trainer import test
 from utils import load_model, plot_results
 
@@ -19,6 +19,8 @@ def main(config):
         _, test_loader = load_mnist(batch_size=config["batch_size"], image_size=config["image_size"])
     elif config["dataset_name"] == "foodvision":
         _, test_loader = load_foodvision(batch_size=config["batch_size"], image_size=config["image_size"])
+    elif config["dataset_name"] == "cifar10":
+        _, test_loader = load_cifar10(batch_size=config["batch_size"], image_size=config["image_size"])
     else:
         assert False, "Unknown dataset name"
 

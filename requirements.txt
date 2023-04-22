@@ -56,7 +56,7 @@ networkx==2.6.3
 numpy @ file:///opt/conda/conda-bld/numpy_and_numpy_base_1653915516269/work
 oauthlib==3.2.0
 olefile @ file:///home/conda/feedstock_root/build_artifacts/olefile_1602866521163/work
-onnx==1.12.0
+onnx==1.13.0
 onnxruntime==1.12.1
 onnxruntime-gpu==1.12.1
 opencv-python==4.6.0.66

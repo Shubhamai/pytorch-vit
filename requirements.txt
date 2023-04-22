@@ -105,7 +105,7 @@ threadpoolctl==3.1.0
 tifffile==2021.11.2
 tomli==2.0.1
 tomlkit==0.11.1
-torch==1.12.1
+torch==1.13.1
 torch-summary==1.4.5
 torchaudio==0.12.1
 torchmetrics==0.9.3

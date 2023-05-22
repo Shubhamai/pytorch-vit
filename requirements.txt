@@ -10,7 +10,7 @@ beautifulsoup4==4.11.1
 black==22.6.0
 brotlipy==0.7.0
 cachetools==5.2.0
-certifi==2022.6.15
+certifi==2022.12.7
 cffi @ file:///opt/conda/conda-bld/cffi_1642701102775/work
 charset-normalizer @ file:///tmp/build/80754af9/charset-normalizer_1630003229654/work
 click==8.1.3

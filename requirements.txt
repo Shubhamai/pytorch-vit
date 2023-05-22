@@ -54,7 +54,7 @@ multidict==6.0.2
 mypy-extensions==0.4.3
 networkx==2.6.3
 numpy @ file:///opt/conda/conda-bld/numpy_and_numpy_base_1653915516269/work
-oauthlib==3.2.0
+oauthlib==3.2.2
 olefile @ file:///home/conda/feedstock_root/build_artifacts/olefile_1602866521163/work
 onnx==1.13.0
 onnxruntime==1.12.1
